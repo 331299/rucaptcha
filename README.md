@@ -20,6 +20,7 @@ This is a Captcha gem for Rails Applications which generates captcha image by C 
 - High performance.
 
 ## Usage
+编译so文件，gcc -o rucaptcha.so rucaptcha.c
 
 Put rucaptcha in your `Gemfile`:
 
