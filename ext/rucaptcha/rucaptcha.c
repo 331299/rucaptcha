@@ -6,10 +6,11 @@ void makegif(unsigned char im[70*200], unsigned char gif[gifsize], int style);
 #include <unistd.h>
 #include <stdint.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <fcntl.h>
 #include <string.h>
 #include <time.h>
-#include <ruby.h>
+// #include <ruby.h>
 #include "font.h"
 #include "colors.h"
 
@@ -186,49 +187,52 @@ void captcha(unsigned char im[70*200], unsigned char l[8], int length, int i_lin
 }
 
 // #ifdef CAPTCHA
-//
-// int main() {
-//   char l[6];
-//   unsigned char im[70*200];
-//   unsigned char gif[gifsize];
-//
-//   captcha(im,l);
-//   makegif(im,gif);
-//
-//   write(1,gif,gifsize);
-//   write(2,l,5);
-//
-//   return 0;
-// }
-//
-// #endif
 
-VALUE RuCaptcha = Qnil;
-
-void Init_rucaptcha();
-
-VALUE create(VALUE self, VALUE style, VALUE length, VALUE line);
-
-void Init_rucaptcha() {
-  RuCaptcha = rb_define_module("RuCaptcha");
-  rb_define_singleton_method(RuCaptcha, "create", create, 3);
-}
-
-VALUE create(VALUE self, VALUE style, VALUE length, VALUE line) {
+int main(int argc, char* argv[]) {
   char l[8];
   unsigned char im[80*200];
   unsigned char gif[gifsize];
-  int i_style = FIX2INT(style);
-  int i_length = FIX2INT(length);
-  int i_line = FIX2INT(line);
-
+  int i_style = atoi(argv[1]);
+  int i_length = atoi(argv[2]);
+  int i_line = atoi(argv[3]);
   captcha(im, l, i_length, i_line);
   makegif(im, gif, i_style);
-
-  VALUE result = rb_ary_new2(2);
-  rb_ary_push(result, rb_str_new2(l));
-  rb_ary_push(result, rb_str_new(gif, gifsize));
-
-  return result;
+  printf("%s", l);
+  int i;
+  for(i=0;i<gifsize;i++){
+    printf("%c", gif[i]);
+  }
+  return 0;
 }
+
+// #endif
+
+// VALUE RuCaptcha = Qnil;
+
+// void Init_rucaptcha();
+
+// VALUE create(VALUE self, VALUE style, VALUE length, VALUE line);
+
+// void Init_rucaptcha() {
+//   RuCaptcha = rb_define_module("RuCaptcha");
+//   rb_define_singleton_method(RuCaptcha, "create", create, 3);
+// }
+
+// VALUE create(VALUE self, VALUE style, VALUE length, VALUE line) {
+//   char l[8];
+//   unsigned char im[80*200];
+//   unsigned char gif[gifsize];
+//   int i_style = FIX2INT(style);
+//   int i_length = FIX2INT(length);
+//   int i_line = FIX2INT(line);
+
+//   captcha(im, l, i_length, i_line);
+//   makegif(im, gif, i_style);
+
+//   VALUE result = rb_ary_new2(2);
+//   rb_ary_push(result, rb_str_new2(l));
+//   rb_ary_push(result, rb_str_new(gif, gifsize));
+
+//   return result;
+// }
 

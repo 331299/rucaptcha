@@ -9,13 +9,12 @@ Gem::Specification.new do |s|
   s.authors               = 'Jason Lee'
   s.email                 = 'huacnlee@gmail.com'
   s.files                 = Dir.glob('lib/**/*.{rb}') +
-                            Dir.glob("ext/**/*.{h,c,rb}") +
+                            Dir.glob("ext/**/*") +
                             Dir.glob('app/**/*') +
                             Dir.glob('config/**/*') +
                             %w[README.md CHANGELOG.md]
   s.homepage              = 'https://github.com/huacnlee/rucaptcha'
   s.require_paths         = ['lib']
-  s.extensions            = %w[ext/rucaptcha/extconf.rb]
   s.summary               = 'This is a Captcha gem for Rails Applications. It drawing captcha image with C code so it no dependencies.'
   s.license               = "MIT"
   s.required_ruby_version = ">= 2.0.0"

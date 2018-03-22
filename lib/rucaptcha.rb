@@ -1,7 +1,6 @@
 require 'rails'
 require 'action_controller'
 require 'active_support/all'
-require 'rucaptcha/rucaptcha'
 require 'rucaptcha/version'
 require 'rucaptcha/configuration'
 require 'rucaptcha/controller_helpers'
@@ -14,6 +13,7 @@ module RuCaptcha
   class << self
     def config
       return @config if defined?(@config)
+      @ext_path = File.expand_path("../../ext/rucaptcha/rucaptcha.so", __FILE__)
       @config = Configuration.new
       @config.style         = :colorful
       @config.length        = 5
@@ -42,7 +42,9 @@ module RuCaptcha
       end
 
       strikethrough = config.strikethrough ? 1 : 0
-      self.create(style, length, strikethrough)
+      # self.create(style, length, strikethrough)
+      res = `#{@ext_path} #{style} #{length} #{strikethrough}`
+      [res[0, length], res[length..-1]]
     end
 
     def check_cache_store!
