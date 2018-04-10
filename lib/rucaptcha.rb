@@ -14,6 +14,19 @@ module RuCaptcha
     def config
       return @config if defined?(@config)
       @ext_path = File.expand_path("../../ext/rucaptcha/rucaptcha.so", __FILE__)
+      unless File.exist?(@ext_path)
+        case RbConfig::CONFIG['host_os']
+        when /mswin|msys|mingw|cygwin|bccwin|wince|emc/
+          # :windows
+          raise "doesn't support windows, since rucaptcha use /dev/urandom"
+        when /darwin|mac os|linux|solaris|bsd/
+          source_code_path = File.expand_path("../../ext/rucaptcha/rucaptcha.c", __FILE__)
+          `gcc -o #{@ext_path} #{source_code_path}`
+        else
+          raise "unknown os: #{host_os.inspect}"
+        end
+      end
+
       @config = Configuration.new
       @config.style         = :colorful
       @config.length        = 5
